@@ -1,0 +1,16 @@
+{
+  "name": "dev.hai-vr.fuck-osc-config",
+  "displayName": "Haï ~ Fuck the OSC config file",
+  "version": "1.0.0",
+  "unity": "2019.4",
+  "description": "Deletes the OSC config file after every avatar upload",
+  "vrchatVersion" : "2022.1.1",
+  "author" : {
+    "name" : "Haï~"
+  },
+  "vpmDependencies": {
+    "dev.hai-vr.resilience.toolkit" : "1.0.x",
+    "com.vrchat.avatars": ">=3.1.0 <3.5.0"
+  },
+  "url" : "https://docs.hai-vr.dev/docs/products/fuck-osc-config"
+}
