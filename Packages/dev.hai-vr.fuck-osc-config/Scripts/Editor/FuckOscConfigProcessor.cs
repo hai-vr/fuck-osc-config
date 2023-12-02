@@ -76,7 +76,7 @@ namespace FuckOscConfig
             }
             catch (Exception e)
             {
-                Debug.LogError($"(AutoResetOscConfig) Failed to removed the OSC config file at {printLocation}");
+                Debug.LogError($"(AutoResetOscConfig) Failed to remove the OSC config file at {printLocation}");
                 throw;
             }
         }
