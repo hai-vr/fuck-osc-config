@@ -3,18 +3,30 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VRC.Core;
+using VRC.SDK3A.Editor;
 using VRC.SDKBase.Editor;
-using VRC.SDKBase.Editor.BuildPipeline;
 
 namespace FuckOscConfig
 {
-    public class FuckOscConfigProcessor : IVRCSDKPostprocessAvatarCallback
+    public class FuckOscConfigProcessor
     {
-        public int callbackOrder { get; }
-
-        public void OnPostprocessAvatar()
+		[InitializeOnLoadMethod]
+		public static void RegisterCallback()
         {
-            var avatarId = EditorPrefs.GetString("lastBuiltAssetBundleBlueprintID");
+            VRCSdkControlPanel.OnSdkPanelEnable += OnSdkPanelEnable;
+        }
+
+        private static void OnSdkPanelEnable(object sender, EventArgs args)
+        {
+            if (VRCSdkControlPanel.TryGetBuilder<IVRCSdkAvatarBuilderApi>(out var builder))
+            {
+                builder.OnSdkUploadSuccess += OnSdkUploadSuccess;
+            }
+        }
+
+        private static void OnSdkUploadSuccess(object sender, string avatarId)
+        {
+            Debug.Log($"(AutoRemoveOscConfig) Upload success, will try to remove OSC config...");
             TryDeleteOscConfigFile(avatarId);
         }
         
@@ -23,7 +35,7 @@ namespace FuckOscConfig
         {
             if (!APIUser.IsLoggedIn)
             {
-                Debug.LogError("(FTOCF) Cannot remove OSC config file, you are not logged in. User ID is required for removal");
+                Debug.LogError("(AutoRemoveOscConfig) Cannot remove OSC config file, you are not logged in. User ID is required for removal");
                 return;
             }
 
@@ -33,7 +45,7 @@ namespace FuckOscConfig
             var pipeline = activeObject.transform.GetComponentInParent<PipelineManager>();
             if (pipeline == null) return;
             
-            Debug.Log($"(FTOCF) Trying to delete OSC config file of {pipeline.blueprintId}");
+            Debug.Log($"(AutoRemoveOscConfig) Trying to delete OSC config file of {pipeline.blueprintId}");
             TryDeleteOscConfigFile(pipeline.blueprintId);
         }
 
@@ -49,8 +61,9 @@ namespace FuckOscConfig
                 return;
             }
 
-            var theFuckingOscConfigFile =
-                $"{VRC_SdkBuilder.GetLocalLowPath()}/VRChat/VRChat/OSC/{userId}/Avatars/{avatarId}.json";
+            var endbit = $"/VRChat/VRChat/OSC/{userId}/Avatars/{avatarId}.json";
+            var theFuckingOscConfigFile = $"{VRC_SdkBuilder.GetLocalLowPath()}{endbit}";
+            var printLocation = $"%LOCALAPPDATA%Low{endbit}"; // Doesn't print the account name to the logs
             if (!File.Exists(theFuckingOscConfigFile)) return;
 
             var fileAttributes = File.GetAttributes(theFuckingOscConfigFile);
@@ -59,11 +72,11 @@ namespace FuckOscConfig
             try
             {
                 File.Delete(theFuckingOscConfigFile);
-                Debug.Log($"(FTOCF) Obliterated the OSC config file located at {theFuckingOscConfigFile}");
+                Debug.Log($"(AutoRemoveOscConfig) Removed the OSC config file located at {printLocation}");
             }
             catch (Exception e)
             {
-                Debug.LogError($"(FTOCF) Attempt to delete the OSC config file has failed (at {theFuckingOscConfigFile})");
+                Debug.LogError($"(AutoRemoveOscConfig) Failed to removed the OSC config file at {printLocation}");
                 throw;
             }
         }
