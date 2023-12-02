@@ -1,9 +1,9 @@
 {
   "name": "dev.hai-vr.fuck-osc-config",
-  "displayName": "Haï ~ Auto-remove OSC config file",
-  "version": "1.1.1",
+  "displayName": "Haï ~ Auto-reset OSC config file",
+  "version": "1.1.2",
   "unity": "2019.4",
-  "description": "Deletes the OSC config file after every avatar upload https://docs.hai-vr.dev/docs/products/auto-remove-osc-config",
+  "description": "Deletes the OSC config file after every avatar upload https://docs.hai-vr.dev/docs/products/auto-reset-osc-config",
   "vrchatVersion" : "2022.1.1",
   "author" : {
     "name" : "Haï~"
@@ -12,5 +12,5 @@
     "dev.hai-vr.resilience.toolkit" : "1.0.x",
     "com.vrchat.avatars": ">=3.1.0 <3.5.0"
   },
-  "url" : "https://docs.hai-vr.dev/docs/products/auto-remove-osc-config"
+  "url" : "https://docs.hai-vr.dev/docs/products/auto-reset-osc-config"
 }

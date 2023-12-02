@@ -26,7 +26,7 @@ namespace FuckOscConfig
 
         private static void OnSdkUploadSuccess(object sender, string avatarId)
         {
-            Debug.Log($"(AutoRemoveOscConfig) Upload success, will try to remove OSC config...");
+            Debug.Log($"(AutoResetOscConfig) Upload success, will try to remove OSC config...");
             TryDeleteOscConfigFile(avatarId);
         }
         
@@ -35,7 +35,7 @@ namespace FuckOscConfig
         {
             if (!APIUser.IsLoggedIn)
             {
-                Debug.LogError("(AutoRemoveOscConfig) Cannot remove OSC config file, you are not logged in. User ID is required for removal");
+                Debug.LogError("(AutoResetOscConfig) Cannot remove OSC config file, you are not logged in. User ID is required for removal");
                 return;
             }
 
@@ -45,7 +45,7 @@ namespace FuckOscConfig
             var pipeline = activeObject.transform.GetComponentInParent<PipelineManager>();
             if (pipeline == null) return;
             
-            Debug.Log($"(AutoRemoveOscConfig) Trying to delete OSC config file of {pipeline.blueprintId}");
+            Debug.Log($"(AutoResetOscConfig) Trying to delete OSC config file of {pipeline.blueprintId}");
             TryDeleteOscConfigFile(pipeline.blueprintId);
         }
 
@@ -72,11 +72,11 @@ namespace FuckOscConfig
             try
             {
                 File.Delete(theFuckingOscConfigFile);
-                Debug.Log($"(AutoRemoveOscConfig) Removed the OSC config file located at {printLocation}");
+                Debug.Log($"(AutoResetOscConfig) Removed the OSC config file located at {printLocation}");
             }
             catch (Exception e)
             {
-                Debug.LogError($"(AutoRemoveOscConfig) Failed to removed the OSC config file at {printLocation}");
+                Debug.LogError($"(AutoResetOscConfig) Failed to removed the OSC config file at {printLocation}");
                 throw;
             }
         }
